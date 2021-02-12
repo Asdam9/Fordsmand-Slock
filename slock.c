@@ -262,7 +262,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 
 	while (running && !XNextEvent(dpy, &ev)) {
 		if (ev.type == KeyPress) {
-#ifdef SCREENSLEEP
+#ifdef SCREENSLEEPBACKLIGHT
                         char* tmpSTR;
                         if(0 > asprintf(&tmpSTR, "xbacklight -set %f", priorBackLight)) tmpSTR = "xbacklight -set 100";
                         system(tmpSTR);
@@ -564,9 +564,13 @@ main(int argc, char **argv) {
 	
 #endif
 
-#ifdef SCREENSLEEP
+#ifdef SCREENSLEEPBACKLIGHT
         priorBackLight = getPriorBackLight();
         system("xbacklight -set 0");
+#endif
+
+#ifdef SCREENSLEEP
+        system("systemctl suspend");
 #endif
 
 	/* check for Xrandr support */
